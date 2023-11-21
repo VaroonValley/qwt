@@ -25,13 +25,13 @@ foreach ($fetchData as $item) {
     $index = floor($timeSlotEnd / 2);
     if ($index < 12) {
         $data[$index] = $value;
+        $amp[$index] = $ampValue;
     }
 }
 
 $data = json_encode($data);
-$dataAmp = json_encode($dataAmp);
 $labels = json_encode(range(0, 24, 2));
-
+$dataAmp = json_encode($amp);
 ?>
 
 <!DOCTYPE html>
@@ -54,26 +54,32 @@ $labels = json_encode(range(0, 24, 2));
     <script>
         const phpData = <?php echo $data; ?>;
         const phpLabel = <?php echo $labels; ?>;
-        const ctx = document.getElementById('voltage');
+        const ampData = <?php echo $dataAmp; ?>;
+        createChart(phpData, phpLabel, 'voltage');
+        createChart(ampData, phpLabel, 'amp');
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: phpLabel,
-                datasets: [{
-                    label: 'Voltage',
-                    data: phpData,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        function createChart(data, label, canvax_id) {
+            const ctx = document.getElementById(canvax_id);
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: label,
+                    datasets: [{
+                        label: 'Voltage',
+                        data: data,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
+            });
+            return myChart;
+        }
     </script>
 </body>
 
