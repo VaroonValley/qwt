@@ -1,14 +1,17 @@
 <?php
 
+include 'conn.php';
+
 $fetchDailyData = "SELECT
     FLOOR(HOUR(date) / 2) * 2 AS time_slot_end,
-    SUM(voltage) AS voltage,
-    SUM(amp) AS amp,
+    MAX(voltage) AS voltage,
+    MAX(amp) AS amp,
     device_id
 FROM q_power
-WHERE date >= CURDATE()
-GROUP BY time_slot_end
-ORDER BY time_slot_end;";
+WHERE date >= CURDATE() AND device_id ='37C:9E:BD:C0:AE:FC:VTLI16'
+GROUP BY time_slot_end, device_id
+ORDER BY time_slot_end";
+
 $result = mysqli_query($connection, $fetchDailyData);
 
 $fetchData = [];
@@ -45,6 +48,7 @@ $dataAmp = json_encode($amp);
 
 <body>
     <div>
+        <h1></h1>
         <canvas id="voltage"></canvas>
         <canvas id="amp"></canvas>
     </div>
@@ -55,19 +59,20 @@ $dataAmp = json_encode($amp);
         const phpData = <?php echo $data; ?>;
         const phpLabel = <?php echo $labels; ?>;
         const ampData = <?php echo $dataAmp; ?>;
-        createChart(phpData, phpLabel, 'voltage');
-        createChart(ampData, phpLabel, 'amp');
+        createChart(phpData, phpLabel, 'voltage', 'Voltage','skyblue', 220, 230, 'darkred', 'orange');
+        createChart(ampData, phpLabel, 'amp', 'Ampear', 'skyblue', 0 , 100 ,'darkred', 'orange');
 
-        function createChart(data, label, canvax_id) {
+        function createChart(data, label, canvax_id, chartLabel, color, min, max, colorAbove, colorBelow, ) {
             const ctx = document.getElementById(canvax_id);
             return new Chart(ctx, {
                 type: 'bar',
                 data: {
                     labels: label,
                     datasets: [{
-                        label: 'Voltage',
+                        label: chartLabel,
                         data: data,
-                        borderWidth: 1
+                        borderWidth: 3,
+                        backgroundColor: data.map(value => (value > max ? colorAbove : color ) || (value < min ? colorBelow : color))
                     }]
                 },
                 options: {
