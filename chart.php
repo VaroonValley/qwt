@@ -15,7 +15,7 @@ $date = isset($_REQUEST["date"]) ? $_REQUEST["date"] : date("Y-m-d");
 
 <body>
     <div>
-        <h3><?php echo $date ?></h3>
+        <h3><?php echo date('Y-m-d l', strtotime($date)) ?></h3>
         <div class="flex-container">
             <div>
                 <?php if ($date > date('Y-m-d', strtotime('- 6 day'))) { ?>
