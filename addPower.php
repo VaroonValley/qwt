@@ -6,26 +6,19 @@ function addPower($device_id, $voltage, $amp)
 {
     global $connection;
 
+    $env = parse_ini_file(".env");
+
     $insertStatement = "INSERT INTO q_power (device_id, voltage, amp, date) 
                     VALUES ('$device_id', $voltage, $amp, CURTIME())";
 
     $query = mysqli_query($connection, $insertStatement);
-    if ($voltage > 230 or $voltage < 220) {
+    if ($voltage > $env['MAX_VOLTAGE'] or $voltage < $env['MIN_VOLTAGE']) {
+        echo $voltage;
         sendMail('voltage = ' . $voltage);
     }
-    if ($amp > 100 or $amp < 80) {
+    if ($amp > $env['MAX_AMP'] or $amp < $env['MIN_AMP']) {
+        echo $amp;
         sendMail('amp = ' . $amp);
     }
-    // if ($query) {
-    //     $lastInsertedId = mysqli_insert_id($connection);
-
-    //     $fetchInsertedData = "SELECT * FROM q_power WHERE id = $lastInsertedId";
-    //     $result = mysqli_query($connection, $fetchInsertedData);
-
-    //     if ($result) {
-    //         $insertedData = mysqli_fetch_assoc($result);
-    //         return $insertedData;
-    //     }
-    // }
     return $query;
 }

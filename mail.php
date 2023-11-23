@@ -1,6 +1,5 @@
 <?php
 
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -10,20 +9,18 @@ require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
 require 'vendor/phpmailer/phpmailer/src/SMTP.php';
 function sendMail($message)
 {
-
-
-
+    $env = parse_ini_file(".env");
     // Create a new PHPMailer instance
     $mail = new PHPMailer();
 
     // SMTP configuration (for example, using Gmail SMTP)
     $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
+    $mail->Host = $env['SMTP_HOST'];
     $mail->SMTPAuth = true;
-    $mail->Username = 'soephyuphyuhtun99@gmail.com';
-    $mail->Password = 'ovpb doci lrit emvp';
+    $mail->Username = $env['USERNAME'];
+    $mail->Password = $env['PASSWORD'];
     $mail->SMTPSecure = 'tls';
-    $mail->Port = 587;
+    $mail->Port = $env['SMTP_PORT'];
 
     // Sender and recipient details
     $mail->setFrom('soephyuphyuhtun99@gmail.com', 'Soe Phyu Phyu Htun');
