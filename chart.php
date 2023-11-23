@@ -50,7 +50,7 @@ $dataAmp = json_encode($amp);
         <canvas id="amp"></canvas>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./chart.js"></script>
 
     <script>
         createChart();
