@@ -1,6 +1,6 @@
 <?php
 $date = isset($_REQUEST["date"]) ? $_REQUEST["date"] : date("Y-m-d");
-
+$deviceID = $_REQUEST['device_id'];
 $today = date('Y-m-d');
 $formattedDate = date('d-m-Y l', strtotime($date));
 $isToday = ($date == $today) ? 'Today': '';
@@ -11,24 +11,30 @@ $isToday = ($date == $today) ? 'Today': '';
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Document</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/popupbox.css">
 </head>
 
+<header>
+   <h1>Power Chart</h1>
+</header>
+
 <body>
+
     <div>
-        <h3><?php echo $isToday. '&nbsp; &nbsp;'. date('d-m-Y l', strtotime($date))  ?></h3>
+        <h3> Model ID : <?= $deviceID ?> </h3>
+        <h4><?php echo $isToday . '&nbsp;&nbsp;' . date('l, d F Y', strtotime($date)) ?></h4>
         <div class="flex-container">
             <div>
                 <?php if ($date > date('Y-m-d', strtotime('- 6 day'))) { ?>
-                    <a href="/chart.php?device_id=<?php echo $_REQUEST['device_id'] ?>&date=<?php echo date('Y-m-d', strtotime($date . '- 1 day')) ?>" class="link-button">Previous</a>
+                    <a href="/chart.php?device_id=<?php echo $deviceID ?>&date=<?php echo date('Y-m-d', strtotime($date . '- 1 day')) ?>" class="link-button">Previous</a>
                 <?php } ?>
             </div>
             <div>
                 <?php if ($date < date('Y-m-d')) { ?>
-                    <a href="/chart.php?device_id=<?php echo $_REQUEST['device_id'] ?>&date=<?php echo date('Y-m-d', strtotime($date . '+ 1 day')) ?>" class="link-button">Next</a>
+                    <a href="/chart.php?device_id=<?php echo $deviceID ?>&date=<?php echo date('Y-m-d', strtotime($date . '+ 1 day')) ?>" class="link-button">Next</a>
                 <?php } ?>
             </div>
         </div>
