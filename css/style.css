@@ -1,14 +1,20 @@
-
-.flex-container{
-    display: flex;
-    justify-content: space-between;
-    margin: 2rem 0;
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 3rem;
 }
 
-.link-button{
-    padding: 0.5rem 1rem;
-    background-color: rgb(0, 98, 255);
-    color: #fff;
-    text-decoration: none;
-    border-radius: 10px;
+.link-button {
+  padding: 0.5rem 1rem;
+  background-color: rgb(0, 98, 255);
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 10px;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+.link-button:hover {
+  background-color: rgb(0, 50, 200);
 }

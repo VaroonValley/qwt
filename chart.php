@@ -1,5 +1,9 @@
 <?php
 $date = isset($_REQUEST["date"]) ? $_REQUEST["date"] : date("Y-m-d");
+
+$today = date('Y-m-d');
+$formattedDate = date('d-m-Y l', strtotime($date));
+$isToday = ($date == $today) ? 'Today': '';
 ?>
 
 <!DOCTYPE html>
@@ -15,11 +19,11 @@ $date = isset($_REQUEST["date"]) ? $_REQUEST["date"] : date("Y-m-d");
 
 <body>
     <div>
-        <h3><?php echo date('Y-m-d l', strtotime($date)) ?></h3>
+        <h3><?php echo $isToday. '&nbsp; &nbsp;'. date('d-m-Y l', strtotime($date))  ?></h3>
         <div class="flex-container">
             <div>
                 <?php if ($date > date('Y-m-d', strtotime('- 6 day'))) { ?>
-                    <a href="/chart.php?device_id=<?php echo $_REQUEST['device_id'] ?>&date=<?php echo date('Y-m-d', strtotime($date . '- 1 day')) ?>" class="link-button">Prevoious</a>
+                    <a href="/chart.php?device_id=<?php echo $_REQUEST['device_id'] ?>&date=<?php echo date('Y-m-d', strtotime($date . '- 1 day')) ?>" class="link-button">Previous</a>
                 <?php } ?>
             </div>
             <div>
