@@ -1,54 +1,81 @@
 .overlay {
-    height: 100%;
-    width: 100%;
-    display: none;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: rgb(255, 255, 255);
+  height: 100%;
+  width: 100%;
+  display: none;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: auto; 
 }
-.canvasPopUp{
-    z-index: 2;
+
+.canvasPopUp {
+  z-index: 2;
+}
+
+.overlay p {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
 }
 
 .overlay-content {
-    position: relative;
-    top: 5%;
-    width: 100%;
-    text-align: center;
-    margin-top: 30px;
+  position: relative;
+  top: 5%;
+  width: 80%; /* Adjust the width as needed */
+  margin: 0 auto; /* Center the content */
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  max-height: 80vh; /* Set a maximum height for better usability */
+  overflow-y: auto; /* Enable scrolling within the content */
 }
 
 .overlay a {
-    padding: 8px;
-    text-decoration: none;
-    font-size: 36px;
-    color: #818181;
-    display: block;
-    transition: 0.3s;
+  padding: 8px;
+  text-decoration: none;
+  font-size: 36px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
 }
 
 .overlay a:hover,
 .overlay a:focus {
-    color: #f1f1f1;
+  color: #f1f1f1;
 }
 
 .overlay .closebtn {
-    position: absolute;
-    top: 20px;
-    right: 45px;
-    font-size: 30px;
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 30px;
+  color: rgb(23, 72, 231);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.overlay .closebtn:hover {
+  color: #000;
 }
 
 @media screen and (max-height: 450px) {
-    .overlay a {
-        font-size: 20px
-    }
+  .overlay a {
+    font-size: 20px;
+  }
 
-    .overlay .closebtn {
-        font-size: 40px;
-        top: 15px;
-        right: 35px;
-    }
+  .overlay .closebtn {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .overlay p {
+    font-size: 16px;
+  }
 }
