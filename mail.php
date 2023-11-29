@@ -39,3 +39,30 @@ function sendMail($message)
         return 'Mailer Error: ' . $mail->ErrorInfo;
     }
 }
+
+
+
+
+
+require_once('class.phpmailer.php');
+$mail = new PHPMailer();
+$mail->IsSMTP();
+$msg ="Control Panel Login Details";
+
+    $mail->SMTPAuth = true;
+    $mail->SMTPSecure = "none";
+    $mail->Host = "qwebit.com";
+    $mail->Port = 25;
+
+    $mail->Username = "dnr@qwebit.com"; // SMTP account username
+    $mail->Password = "00760076A*a*";        // SMTP account password
+    $mail->AddAddress("quality.web.it.solutions@gmail.com");
+    $mail->SetFrom("dnr@qwebit.com", "test@qwebit.com");
+    $mail->Subject = "Control Panel Details";
+    $mail->MsgHTML($msg);
+    
+    $mail->Send();
+    echo "Message Sent OK";
+    
+    
+    ?>
