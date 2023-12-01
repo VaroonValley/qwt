@@ -87,6 +87,12 @@ function chartByTimeSlot(time_slot, isVoltage) {
       let max = maxVoltage;
       let chartLabel = "Voltage";
       let fetchData = "voltage";
+      let thickness;
+      if(window.innerWidth <= 768){
+        thickness = 20
+      }else{
+        thickness = 50
+      }
       if (!isVoltage) {
         low = lowAmp;
         ideal = idealAmp;
@@ -114,7 +120,9 @@ function chartByTimeSlot(time_slot, isVoltage) {
         max,
         lowDanger,
         maxDanger,
-        warning
+        warning,
+        ()=>{},
+        thickness
       );
     },
     error: function (xhr, status, error) {
@@ -132,7 +140,7 @@ function applyChart(response) {
     voltage[index] = response[item]["max_voltage"];
     amp[index] = response[item]["max_amp"];
   });
-  let labels = Array.from({ length: 13 }, (_, i) => i * 2 + ":00 o'clock");
+  let labels = Array.from({ length: 13 }, (_, i) => i * 2 + ":00");
   voltageChartByDate(voltage, labels);
   ampChartByDate(amp, labels);
 }
@@ -167,7 +175,8 @@ function createChart(
   lowDanger,
   maxDanger,
   warning,
-  onChartClick
+  onChartClick,
+  thickness
 ) {
   const ctx = document.getElementById(canvax_id);
   return new Chart(ctx, {
@@ -178,7 +187,7 @@ function createChart(
         {
           label: chartLabel,
           data: data,
-          barThickness: 50,
+          barThickness: thickness ? thickness : 'flex',
           backgroundColor: data.map((value) =>
             value > max
               ? maxDanger
@@ -217,6 +226,8 @@ function createChart(
           },
         },
         y: {
+          suggestedMin: 0,
+          suggestedMax: max,
           ticks: {
             font: {
               size: 16,
