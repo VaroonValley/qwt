@@ -17,12 +17,11 @@ $isToday = ($date == $today) ? 'Today': '';
     <link rel="stylesheet" href="./css/popupbox.css">
 </head>
 
-<header>
-   <h1>Power Chart</h1>
-</header>
+   
 
-<body>
 
+<body class='lg_container'>
+<h1>Power Chart</h1>
 <div class="container">
     <p class="title">Model ID: <?= $deviceID ?></p>
     <p class="date"><?php echo $isToday . '&nbsp;&nbsp;' . date('l, d F Y', strtotime($date)) ?></p>
@@ -48,7 +47,7 @@ $isToday = ($date == $today) ? 'Today': '';
             <canvas id="amp" class="canvas"></canvas>
         </div>
     </div>
-</div>
+    </div>
 
     <div id="chartPopUp" class="overlay">
         <p> Model ID : <?= $deviceID ?> </p>
