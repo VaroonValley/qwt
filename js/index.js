@@ -88,10 +88,10 @@ function chartByTimeSlot(time_slot, isVoltage) {
       let chartLabel = "Voltage";
       let fetchData = "voltage";
       let thickness;
-      if(window.innerWidth <= 768){
-        thickness = 20
-      }else{
-        thickness = 50
+      if (window.innerWidth <= 768) {
+        thickness = 20;
+      } else {
+        thickness = 50;
       }
       if (!isVoltage) {
         low = lowAmp;
@@ -162,6 +162,26 @@ function fetchData() {
     },
   });
 }
+//
+
+document.getElementById("chartTypeSelect").addEventListener("change", function() {
+  const selectedType = this.value; 
+  updateChartType(selectedType);
+});
+
+function updateChartType(selectedType) {
+  
+  if (chartBySlot) {
+    if (selectedType === "line") {
+      chartBySlot.config.type = "line";
+    } else if (selectedType === "bar") {
+      chartBySlot.config.type = "bar";
+    }
+    chartBySlot.update();
+  }
+}
+//
+
 function createChart(
   type,
   data,
@@ -187,7 +207,7 @@ function createChart(
         {
           label: chartLabel,
           data: data,
-          barThickness: thickness ? thickness : 'flex',
+          barThickness: thickness ? thickness : "flex",
           backgroundColor: data.map((value) =>
             value > max
               ? maxDanger
@@ -201,6 +221,7 @@ function createChart(
       ],
     },
     options: {
+      aspectRatio: 2,
       onClick: (evt, activeEls) => {
         const clickedIndex = activeEls?.[0]?.index;
         if (clickedIndex !== undefined && clickedIndex !== null) {
@@ -239,6 +260,7 @@ function createChart(
     },
   });
 }
+
 
 fetchData();
 setInterval(fetchData, 1000 * 60 * refetchInterval);

@@ -1,37 +1,72 @@
 <?php
-include("conn.php");
-include("mail.php");
+
+require_once './classes/Connector.php';
+require_once './classes/MailSender.php';
+
+$connector = new Connector();
+$myDBcon = $connector->myDBcon;
+
+// Create an instance of the MailSender class
+$mailSender = new MailSender();
 
 function addPower($device_id, $voltage, $amp)
 {
-    global $connection;
+    global $myDBcon, $mailSender;
+
+    // Check if the database connection is successful
+    if (!$myDBcon) {
+        error_log("Database connection failed");
+        return false;
+    }
 
     $env = parse_ini_file(".env");
 
     $insertStatement = "INSERT INTO q_power (device_id, voltage, amp, date) 
-                    VALUES ('$device_id', $voltage, $amp, CURTIME())";
+                    VALUES (?, ?, ?, CURTIME())";
 
-    $query = mysqli_query($connection, $insertStatement);
-    if ($voltage > $env['MAX_VOLTAGE'] or $voltage < $env['MIN_VOLTAGE']) {
+    $query = $myDBcon->prepare($insertStatement);
+
+    // Check for statement preparation errors
+    if (!$query) {
+        error_log("Error in preparing the statement: " . $myDBcon->error);
+        return false;
+    }
+
+    // Bind parameters
+    $query->bind_param("sdd", $device_id, $voltage, $amp);
+
+    // Execute the query
+    if (!$query->execute()) {
+        error_log("Error in executing the query: " . $query->error);
+        return false; // or handle the error in an appropriate way
+    }
+
+    // Close the statement
+    $query->close();
+
+    if ($voltage > $env['MAX_VOLTAGE'] || $voltage < $env['MIN_VOLTAGE']) {
         // Log error
         error_log("Voltage out of range: $voltage", 0);
         // Send email notification
-        sendMail('voltage = ' . $voltage);
+        $mailSender->sendMail('your_email@example.com', 'Voltage Out of Range', 'Voltage is out of range: ' . $voltage);
     }
-    if ($amp > $env['MAX_AMP'] or $amp < $env['MIN_AMP']) {
+    if ($amp > $env['MAX_AMP'] || $amp < $env['MIN_AMP']) {
         // Log error
         error_log("Ampere out of range: $amp", 0);
         // Send email notification
-        sendMail('amp = ' . $amp);
+        $mailSender->sendMail('your_email@example.com', 'Ampere Out of Range', 'Ampere is out of range: ' . $amp);
     }
-    return $query;
+
+    return true;
 }
 
-if (isset($_REQUEST['id']) && isset($_REQUEST['voltage']) && isset($_REQUEST['amp'])) {
+// Check if the required parameters are set
+if (isset($_REQUEST['k']) && isset($_REQUEST['id']) && isset($_REQUEST['pvoltage']) && isset($_REQUEST['pcurrent'])) {
     $device_id = trim($_REQUEST['device_id']);
     $voltage = trim($_REQUEST['voltage']);
     $amp = trim($_REQUEST['amp']);
 
+    // Call the addPower function
     $result = addPower($device_id, $voltage, $amp);
 
     // Check if the query was successful

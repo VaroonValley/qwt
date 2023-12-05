@@ -37,6 +37,8 @@ function getPowerByDate($date, $device_id)
     return $data;
 }
 
+
+
 function getMaxPowerByDate($date, $device_id)
 {
     $maxValues = [];
